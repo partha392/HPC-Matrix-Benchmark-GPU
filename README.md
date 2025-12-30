@@ -1,99 +1,116 @@
 # Performance Analysis of Parallel Matrix Computation (CPU vs GPU)
 
-![Python](https://img.shields.io/badge/Python-3.10-blue?style=flat&logo=python)
-![Platform](https://img.shields.io/badge/Platform-Google%20Colab-orange?style=flat&logo=google-colab)
-![Accelerator](https://img.shields.io/badge/GPU-NVIDIA%20CUDA-green?style=flat&logo=nvidia)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
+📌 **Project Overview**
 
-## 📌 Project Overview
+This project demonstrates the practical benefits of **High Performance Computing (HPC)** by benchmarking large-scale matrix multiplication on **CPU vs GPU**.
 
-This project demonstrates the power of **High Performance Computing (HPC)** by benchmarking Large-Scale Matrix Multiplication.
-It compares the performance of a **Serial CPU implementation (NumPy)** against a **Parallel GPU implementation (CuPy)**.
+A comparative study is performed between:
 
-The project is designed to run out-of-the-box on **Google Colab (Jupiter Notebook)** (T4 GPU).
+* **CPU-based** serial computation using **NumPy**
+* **GPU-accelerated** parallel computation using **CuPy** (CUDA)
 
-## 🚀 Motivation
+The project is designed to run out-of-the-box on **Google Colab** using an **NVIDIA Tesla T4 GPU**.
 
-In the era of Big Data and Deep Learning, sequential processing on CPUs is often a bottleneck. This project aims to:
+🚀 **Motivation**
 
-1. Quantify the "Speedup Factor" gained by using GPUs.
-2. Demonstrate how to write CUDA-accelerated Python code without complex C++ boilerplate.
-3. Provide a clear academic reference for MSc-level HPC studies.
+In modern scientific computing, machine learning, and data analytics, sequential CPU execution often becomes a performance bottleneck. This project aims to:
 
-## 🛠 Technologies
+1. Quantify the performance improvement achieved through GPU acceleration
+2. Demonstrate CUDA-enabled parallel computing using high-level Python libraries
+3. Provide an academically sound, reproducible reference for MSc-level HPC coursework
 
-* **Language:** Python 3
-* **CPU Logic:** NumPy (Numerical Python)
-* **GPU Logic:** CuPy (CUDA-accelerated NumPy-compatible library)
-* **Environment:** Google Colab (Jupyter Notebook)
+🛠 **Technologies Used**
 
-## 📂 Repository Structure
+* **Language:** Python 3.10
+* **CPU Computation:** NumPy
+* **GPU Computation:** CuPy
+* **Parallel Platform:** NVIDIA CUDA
+* **Execution Environment:** Google Colab (Jupyter Notebook)
 
-```bash
-HPC-GPU-Benchmark/
-├── colab_notebook.ipynb     # <--- MAIN FILE: Run this in Google Colab
-├── README.md                # Project Documentation
-├── requirements.txt         # Dependencies for local execution
-├── src/                     # Source Code (Modular)
-│   ├── cpu_version.py       # CPU implementation
-│   ├── gpu_version.py       # GPU implementation
-│   └── benchmark.py         # Main driver script
-├── results/                 # Output logs and benchmarks
-└── report/                  # Project Report
-    └── HPC_Project_Report.md # Full Academic Report
+📂 **Repository Structure**
+
+```
+HPC-Matrix-Benchmark-GPU/
+├── colab_notebook.ipynb        # MAIN FILE (Run on Google Colab)
+├── README.md                   # Project Documentation
+├── requirements.txt            # Optional local dependencies
+├── src/
+│   ├── cpu_version.py          # CPU implementation (NumPy)
+│   ├── gpu_version.py          # GPU implementation (CuPy)
+│   └── benchmark.py            # Benchmark driver
+├── results/                    # Benchmark logs / outputs
+└── report/
+    └── HPC_Project_Report.md   # Full academic project report
 ```
 
-## ⚡ How to Run
+⚡ **How to Run**
 
-### Option 1: Google Colab (Recommended)
+**Option 1: Google Colab (Recommended)**
 
-1. Download `colab_notebook.ipynb` from this repository.
-2. Upload it to [Google Colab](https://colab.research.google.com/).
-3. Go to **Runtime > Change runtime type**.
-4. Select **T4 GPU** (under Hardware Accelerator).
-5. Click **Runtime > Run all**.
+1. Download `colab_notebook.ipynb` from this repository
+2. Upload it to [https://colab.research.google.com](https://colab.research.google.com)
+3. Go to **Runtime → Change runtime type**
+4. Select **GPU (T4)** as the hardware accelerator
+5. Click **Runtime → Run all**
 
-### Option 2: Local (Requires NVIDIA GPU)
+✅ *No local setup required*
 
-If you have a local machine with an NVIDIA GPU and CUDA drivers installed:
+**Option 2: Local Execution (Requires NVIDIA GPU)**
+
+Requires:
+
+* NVIDIA GPU
+* CUDA drivers
+* Compatible CuPy installation
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/your-username/HPC-GPU-Benchmark.git
-cd HPC-GPU-Benchmark
+# Clone the repository
+git clone https://github.com/partha392/HPC-Matrix-Benchmark-GPU.git
+cd HPC-Matrix-Benchmark-GPU
 
-# 2. Install dependencies
+# Install dependencies
 pip install -r requirements.txt
 
-# 3. Run the benchmark
+# Run benchmark
 python src/benchmark.py
 ```
 
-## 📊 Sample Output
+📊 **Sample Output**
 
-*(Actual output from Google Colab T4 GPU)*
+*(Observed on Google Colab with NVIDIA Tesla T4 GPU)*
 
 ```text
 Matrix Size: 4000 x 4000
-CPU Time: 15.5210 sec
-GPU Time: 0.0820 sec
+CPU Time: 12.8 – 18.1 sec
+GPU Time: 0.08 – 0.15 sec
 -------------------------
-SPEEDUP ACHIEVED: 189.2x
+Observed Speedup: ~80x – 180x
 ```
 
-## 📜 Academic Report
+⚠️ *Exact performance may vary due to shared cloud infrastructure and runtime conditions.*
 
-A full **15-page academic project report** is available in the `report/` directory. It includes:
+📜 **Academic Report**
 
-* Introduction to CUDA Architecture
-* Methodology
-* Detailed Speedup Analysis
-* Future Scope
+A detailed academic report is available in the `report/` directory, covering:
 
-## 🤝 Contributing
+* HPC and CUDA architecture overview
+* Experimental methodology
+* Performance benchmarking and speedup analysis
+* Limitations and future scope
 
-This is an academic project. Suggestions for optimizing the CUDA kernels or adding new benchmarks (e.g., FFT, Monte Carlo) are welcome.
+📄 File: [report/HPC_Project_Report.md](report/HPC_Project_Report.md)
 
-## 📝 License
+🤝 **Contributions & Extensions**
 
-MIT License. Free to use for educational purposes.
+This is an academic HPC benchmark project.
+Possible extensions include:
+
+* Multi-GPU benchmarking (NCCL)
+* Mixed-precision computation using Tensor Cores
+* Additional benchmarks (FFT, Monte Carlo, reductions)
+
+Suggestions and improvements are welcome.
+
+📝 **License**
+
+This project is licensed under the MIT License and is free to use for educational and academic purposes.
