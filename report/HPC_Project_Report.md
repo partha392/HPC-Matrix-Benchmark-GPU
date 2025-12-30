@@ -2,41 +2,34 @@
 
 **A PROJECT REPORT**
 
-Submitted in partial fulfillment of the requirements for the degree of
-
-**MASTER OF SCIENCE**
-in
-**COMPUTER SCIENCE**
-
+Submitted in partial fulfillment of the requirements for the ACC HPC, under CDAC(CINE)
 ---
 
 ## CERTIFICATE
 
-This is to certify that the project report entitled **"Performance Analysis of Parallel Matrix Computation using CUDA-Enabled GPUs"** is a bona fide work carried out by **[YOUR NAME]** under my supervision. This work has not been submitted elsewhere for any other degree or diploma.
+This is to certify that the project report entitled **"Performance Analysis of Parallel Matrix Computation using CUDA-Enabled GPUs"** is a bona fide work carried out by **[Partha Pratim Das and Manash Das][under CDAC(CINE) supervision. This work has not been submitted elsewhere for any other degree or diploma.
 
-**Signature of Supervisor**  
-[Supervisor Name]  
-Department of Computer Science  
-[University Name]
-
-**Date:** [Date]
+Department of CDAC(CINE), IIT Ghy
+**Date:** [31/12/25]
 
 ---
 
 ## DECLARATION
 
-I hereby declare that the project entitled **"Performance Analysis of Parallel Matrix Computation using CUDA-Enabled GPUs"** submitted for the MSc Computer Science degree is my original work and the project has not formed the basis for the award of any degree, associateship, fellowship, or any other similar title.
+I hereby declare that the project entitled **"Performance Analysis of Parallel Matrix Computation using CUDA-Enabled GPUs"** submitted for the HPC Course is my original work and the project has not formed the basis for the award of any degree, associateship, fellowship, or any other similar title.
 
-**[YOUR NAME]**  
+**[Partha Pratim Das]**
+[Roll Number]
+**[Mansh Das]**
 [Roll Number]
 
 ---
 
 ## ABSTRACT
 
-High Performance Computing (HPC) has become indispensable in the era of big data and artificial intelligence. This project investigates the efficacy of Graphics Processing Units (GPUs) in accelerating dense linear algebra operations, specifically Matrix Multiplication. Utilizing the **Google Colab** platform, we implement a comparative benchmark between a traditional CPU-based approach using **NumPy** and a parallel GPU-based approach using **CuPy** (NVIDIA CUDA).
+High Performance Computing (HPC) plays a critical role in modern scientific computing, machine learning, and large-scale data analysis. One of the most computationally intensive operations in these domains is dense matrix multiplication. Traditional CPU-based computation becomes inefficient for large matrix sizes due to limited parallelism and memory bandwidth constraints.
 
-The study focuses on the speedup factor achieved by offloading computationally intensive tasks to the GPU. Experiments conducted with matrix sizes up to $4000 \times 4000$ demonstrate a significant performance improvement, with the GPU implementation achieving speedups in the range of **100x to 200x** over the CPU baseline. This report details the system architecture, implementation methodology, and quantitative analysis of the results, confirming that GPU-accelerated computing is a viable and necessary paradigm for modern computational tasks.
+This project investigates the performance benefits of GPU-accelerated computation for matrix multiplication using NVIDIA CUDA-enabled GPUs. A comparative benchmark is conducted between a CPU-based implementation using NumPy and a GPU-based implementation using **CuPy**, a **CUDA-accelerated** **NumPy-compatible library**. The experiments are executed on the Google Colab (Jupiter Notebook) platform using an NVIDIA Tesla T4 GPU.
 
 **Keywords:** High Performance Computing, GPU, CUDA, CuPy, Matrix Multiplication, Parallel Processing, Speedup.
 
