@@ -1,0 +1,4 @@
+numpy
+cupy-cuda12x; sys_platform == 'linux'
+cupy-cuda12x; sys_platform == 'win32'
+matplotlib

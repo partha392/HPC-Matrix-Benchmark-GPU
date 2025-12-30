@@ -1,0 +1,5 @@
+HPC PROJECT BENCHMARK RESULTS
+=============================
+Matrix Size: 4000
+CPU Time: 0.4625 sec
+GPU Time: N/A
