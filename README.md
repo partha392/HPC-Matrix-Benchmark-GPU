@@ -10,7 +10,7 @@
 This project demonstrates the power of **High Performance Computing (HPC)** by benchmarking Large-Scale Matrix Multiplication.
 It compares the performance of a **Serial CPU implementation (NumPy)** against a **Parallel GPU implementation (CuPy)**.
 
-The project is designed to run out-of-the-box on **Google Colab (Jupiter Notebook)** Go Go (T4 GPU).
+The project is designed to run out-of-the-box on **Google Colab (Jupiter Notebook)** (T4 GPU).
 
 ## 🚀 Motivation
 
