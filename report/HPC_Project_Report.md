@@ -1,224 +1,210 @@
-# PERFORMANCE ANALYSIS OF PARALLEL MATRIX COMPUTATION USING CUDA-ENABLED GPUS
+PERFORMANCE ANALYSIS OF PARALLEL MATRIX COMPUTATION USING CUDA-ENABLED GPUS
+A PROJECT REPORT
 
-**A PROJECT REPORT**
+Submitted in partial fulfillment of the requirements for the
+ACC HPC Course
+under C-DAC CINE
 
-Submitted in partial fulfillment of the requirements for the ACC HPC, under CDAC(CINE)
----
+CERTIFICATE
 
-## CERTIFICATE
+This is to certify that the project report entitled “Performance Analysis of Parallel Matrix Computation using CUDA-Enabled GPUs” is a bona fide work carried out by Partha Pratim Das and Manash Das under the supervision of C-DAC (CINE).
+This work has not been submitted elsewhere for any other degree or diploma.
 
-This is to certify that the project report entitled **"Performance Analysis of Parallel Matrix Computation using CUDA-Enabled GPUs"** is a bona fide work carried out by **[Partha Pratim Das and Manash Das][under CDAC(CINE) supervision. This work has not been submitted elsewhere for any other degree or diploma.
+Department: C-DAC (CINE), IIT Guwahati
+Date: 31-12-2025
 
-Department of CDAC(CINE), IIT Ghy
-**Date:** [31/12/25]
+DECLARATION
 
----
+We hereby declare that the project entitled “Performance Analysis of Parallel Matrix Computation using CUDA-Enabled GPUs” submitted for the ACC HPC Course is our original work and has not formed the basis for the award of any degree, associateship, fellowship, or any other similar title.
 
-## DECLARATION
+Partha Pratim Das — Roll No: []
+Manash Das — Roll No: []
 
-I hereby declare that the project entitled **"Performance Analysis of Parallel Matrix Computation using CUDA-Enabled GPUs"** submitted for the HPC Course is my original work and the project has not formed the basis for the award of any degree, associateship, fellowship, or any other similar title.
+ABSTRACT
 
-**[Partha Pratim Das]**
-[Roll Number]
-**[Mansh Das]**
-[Roll Number]
+High Performance Computing (HPC) is a foundational pillar of modern scientific computing, machine learning, and large-scale data analytics. Among HPC workloads, dense matrix multiplication is one of the most computationally intensive operations and serves as a core building block for numerous real-world applications.
 
----
+This project evaluates the performance benefits of GPU-accelerated matrix multiplication using NVIDIA CUDA-enabled GPUs. A comparative benchmark is conducted between a CPU-based implementation using NumPy and a GPU-based implementation using CuPy, a CUDA-accelerated NumPy-compatible library. Experiments are executed on Google Colab using an NVIDIA Tesla T4 GPU.
 
-## ABSTRACT
+For large matrices (up to
+4000
+×
+4000
+4000×4000), the GPU-based implementation achieves one to two orders of magnitude speedup compared to CPU execution under the tested environment. The results clearly demonstrate the effectiveness of GPU parallelism for data-parallel linear algebra workloads.
 
-High Performance Computing (HPC) plays a critical role in modern scientific computing, machine learning, and large-scale data analysis. One of the most computationally intensive operations in these domains is dense matrix multiplication. Traditional CPU-based computation becomes inefficient for large matrix sizes due to limited parallelism and memory bandwidth constraints.
+Keywords: High Performance Computing, GPU Computing, CUDA, CuPy, Matrix Multiplication, Parallel Processing
 
-This project investigates the performance benefits of GPU-accelerated computation for matrix multiplication using NVIDIA CUDA-enabled GPUs. A comparative benchmark is conducted between a CPU-based implementation using NumPy and a GPU-based implementation using **CuPy**, a **CUDA-accelerated** **NumPy-compatible library**. The experiments are executed on the Google Colab (Jupiter Notebook) platform using an NVIDIA Tesla T4 GPU.
+1. INTRODUCTION
 
-**Keywords:** High Performance Computing, GPU, CUDA, CuPy, Matrix Multiplication, Parallel Processing, Speedup.
+The exponential growth of data-intensive applications has exposed the performance limitations of traditional CPU-based computing. While CPUs are optimized for low-latency control and serial execution, they offer limited throughput for massively parallel numerical workloads.
 
----
+To address this challenge, heterogeneous computing has emerged as a dominant paradigm, combining CPUs with specialized accelerators such as GPUs. GPUs provide thousands of lightweight cores capable of executing the same instruction concurrently across large datasets.
 
-## TABLE OF CONTENTS
+Matrix multiplication is selected as the core workload in this project because it is fundamental to scientific simulations, image processing, and machine learning pipelines. By comparing CPU-based and GPU-based implementations, this project quantifies the practical performance gains achievable through GPU acceleration.
 
-1. **Introduction**
-2. **Problem Statement**
-3. **Objectives**
-4. **Background Study**
-    4.1 High Performance Computing (HPC)
-    4.2 GPU Computing
-    4.3 CUDA Architecture
-    4.4 CuPy Library
-5. **System Architecture**
-6. **Methodology**
-    6.1 CPU Implementation (NumPy)
-    6.2 GPU Implementation (CuPy)
-    6.3 Benchmarking Approach
-7. **Experimental Setup**
-8. **Results and Discussion**
-    8.1 Performance Data
-    8.2 Speedup Analysis
-9. **Limitations**
-10. **Conclusion**
-11. **Future Scope**
-12. **References**
+1. PROBLEM STATEMENT
 
----
+Dense matrix multiplication has a computational complexity of
+𝑂
+(
+𝑁
+3
+)
+O(N
+3
+). As matrix size increases, CPU execution time grows rapidly, making large-scale computation inefficient.
 
-## 1. INTRODUCTION
+Key Challenges
 
-The demand for computational power has grown exponentially over the last decade. Traditional Central Processing Units (CPUs), while highly optimized for serial processing and complex logic control, face physical limitations in clock speed scaling—a phenomenon known as the end of Moore's Law scaling for single-thread performance. To overcome this, the computing industry has shifted towards **heterogeneous computing**, where specialized hardware like Graphics Processing Units (GPUs) are used to accelerate specific workloads.
+Limited parallelism on CPU architectures
 
-This project explores the practical application of HPC concepts using **General Purpose GPU (GPGPU)** programming. We select Matrix Multiplication as our core workload because it is the fundamental building block of many scientific simulations, image processing algorithms, and machine learning models. By comparing the execution time of this operation on a standard CPU versus an NVIDIA Tesla GPU, we aim to quantify the benefits of parallel architecture.
+Memory bandwidth bottlenecks
 
-The project is implemented in **Python**, leveraging the ecosystem's ease of use while accessing low-level CUDA performance through the **CuPy** library. The entire experiment is conducted on **Google Colab**, a cloud-based Jupyter environment that democratizes access to high-end GPU resources for students and researchers.
+Underutilization of arithmetic units for data-parallel workloads
 
-## 2. PROBLEM STATEMENT
+Objective
+To evaluate whether GPU-accelerated computation can significantly reduce execution time for large matrix multiplication tasks.
 
-Processing large multidimensional arrays (matrices) on a CPU involves nested loops that typically have a time complexity of $O(N^3)$. For large $N$, this becomes computationally prohibitively expensive.
+1. OBJECTIVES
 
-* **The Challenge:** Sequential execution on a CPU utilizes only a fraction of the available silicon for actual arithmetic, as much of the CPU die is dedicated to cache and branch prediction.
-* **The Need:** There is a need to utilize hardware that provides massive parallelism to handle independent arithmetic operations simultaneously.
-* **The Goal:** To demonstrate how replacing a standard linear algebra library (NumPy) with a CUDA-accelerated library (CuPy) can drastically reduce computation time without complex low-level C++ coding.
+Implement matrix multiplication using CPU-based numerical libraries
 
-## 3. OBJECTIVES
+Implement the same operation using GPU-accelerated libraries
 
-The primary objectives of this project are:
+Benchmark performance across large matrix sizes
 
-1. **To implement** a standard Matrix Multiplication algorithm using CPU-based libraries.
-2. **To implement** the same algorithm using GPU-accelerated libraries on the NVIDIA CUDA platform.
-3. **To benchmark** the performance of both implementations on varying matrix sizes (e.g., $1000 \times 1000$ to $4000 \times 4000$).
-4. **To analyze** the speedup factor ($S = T_{CPU} / T_{GPU}$) and validate the efficiency of parallel computing.
-5. **To provide** a reproducible, academic-standard implementation using Google Colab.
+Analyze speedup achieved through GPU parallelism
 
-## 4. BACKGROUND STUDY
+Demonstrate a reproducible HPC experiment using a cloud environment
 
-### 4.1 High Performance Computing (HPC)
+1. BACKGROUND STUDY
+4.1 High Performance Computing
 
-HPC refers to the practice of aggregating computing power in a way that delivers much higher performance than one could get out of a typical desktop computer or workstation in order to solve large problems in science, engineering, or business. While traditional HPC relies on supercomputers and clusters (using MPI), modern "Desktop HPC" utilizes powerful accelerators like GPUs to achieve similar speedups for specific tasks.
+High Performance Computing refers to the use of advanced computational techniques to solve problems requiring large-scale processing power. Modern HPC increasingly relies on accelerators such as GPUs to achieve high throughput.
 
-### 4.2 GPU Computing
+4.2 GPU Computing
 
-A GPU is a specialized electronic circuit designed to manipulate and alter memory to accelerate the creation of images. However, modern GPUs are "General Purpose" (GPGPU).
+CPU: Few powerful cores, optimized for latency
 
-* **CPU:** Few, powerful cores (Latency Oriented). Good for operating systems, logic, serial tasks.
-* **GPU:** Thousands of weaker, efficient cores (Throughput Oriented). Good for doing the same task on millions of data points at once (Single Instruction Multiple Data - SIMD).
+GPU: Thousands of simpler cores, optimized for throughput
 
-### 4.3 CUDA Architecture
+GPUs excel at executing identical operations across large datasets using SIMD-style parallelism.
 
-**Compute Unified Device Architecture (CUDA)** is a parallel computing platform and programming model created by NVIDIA. It allows developers to use C, C++, Fortran, and Python to send instructions to the GPU.
-In the CUDA model:
+4.3 CUDA Architecture
 
-* **Host:** The CPU and system memory.
-* **Device:** The GPU and its distinct high-speed memory (VRAM).
-* **Kernel:** A function that runs on the GPU, executed by thousands of threads in parallel.
+CUDA (Compute Unified Device Architecture) is NVIDIA’s parallel computing platform that enables execution of code on GPUs. The model consists of a host (CPU), a device (GPU), and kernels executed in parallel by GPU threads.
 
-### 4.4 CuPy Overview
+4.4 CuPy Library
 
-**CuPy** is an open-source matrix library accelerated with NVIDIA CUDA. It uses a syntax highly compatible with **NumPy**. This means scripts written for CPU (NumPy) can often be converted to run on GPU (CuPy) by changing just the import statement (e.g., `import numpy as np` $\to$ `import cupy as cp`). CuPy handles the complexity of memory allocation, host-to-device transfer, and kernel invocation automatically.
+CuPy is a NumPy-compatible library that executes array operations on NVIDIA GPUs using CUDA. It internally leverages highly optimized CUDA libraries such as cuBLAS, enabling GPU acceleration with minimal code changes.
 
-## 5. SYSTEM ARCHITECTURE
+1. SYSTEM ARCHITECTURE
 
-The project follows a **Source-Source-Compare** architecture:
+Input Layer: Random matrix generation
 
-1. **Input Generation Layer:** Random floating-point numbers are generated.
-2. **Computation Layer:**
-    * **Path A (Serial):** Data resides in System RAM $\rightarrow$ Processed by CPU Arithmetic Logic Units (ALUs).
-    * **Path B (Parallel):** Data transferred to GPU VRAM $\rightarrow$ Processed by thousands of CUDA Cores.
-3. **Analysis Layer:** Execution times are captured (wall-clock time), speedup is calculated, and results are logged.
+Computation Layer:
 
-## 6. METHODOLOGY
+CPU Path: NumPy execution on system RAM
 
-### 6.1 CPU Implementation
+GPU Path: CuPy execution on GPU VRAM
 
-We use the **NumPy** library.
+Analysis Layer: Timing measurement and speedup computation
 
-* **Data Type:** `float32` (Single precision).
-* **Operation:** `np.dot(A, B)` or `A @ B`.
-* **Characteristics:** Uses optimized BLAS (Basic Linear Algebra Subprograms) backend, but is fundamentally bound by the CPU's memory bandwidth and core count (typically 2-4 cores on Colab).
+1. METHODOLOGY
+6.1 CPU Implementation
 
-### 6.2 GPU Implementation
+Library: NumPy
 
-We use the **CuPy** library.
+Data Type: float32
 
-* **Memory Management:** Explicit allocation on the device (`cp.random.rand`).
-* **Warm-up:** A dummy operation is run first. This is crucial because the first call to a CUDA function triggers JIT (Just-In-Time) compilation and context initialization, which takes extra time. We exclude this overhead to measure *pure* computation capability.
-* **Synchronization:** GPU calls are asynchronous. We use `cp.cuda.Event` to record start/stop times and `synchronize()` to ensure the CPU waits for the GPU to finish before calculating the elapsed time.
+Operation: A @ B (BLAS-optimized)
 
-### 6.3 Benchmarking Approach
+6.2 GPU Implementation
 
-1. **Initialization:** Verify GPU availability (`nvidia-smi`).
-2. **Workload:** Matrix size $N$ is set to 4000. This involves $2 \times N^3$ floating point operations (approx. 128 Billion operations).
-3. **Timing:**
-    * Start Timer.
-    * Execute Operation.
-    * Synchronize (if GPU).
-    * Stop Timer.
-4. **Repeatability:** Random seeds are not fixed to ensure general performance validity, though matrix dimensions are constant.
+Library: CuPy
 
-## 7. EXPERIMENTAL SETUP
+GPU memory allocation using cp.random.rand()
 
-The experiment was conducted on the **Google Colab** platform.
+Warm-up execution to exclude CUDA initialization overhead
 
-* **Platform:** Google Colab (Free Tier)
-* **Operating System:** Linux (Ubuntu 22.04 LTS)
-* **Language:** Python 3.10
-* **Processor (CPU):** Intel(R) Xeon(R) CPU @ 2.20GHz (2 vCPUs)
-* **Accelerator (GPU):** **NVIDIA Tesla T4**
-  * VRAM: 16 GB GDDR6
-  * CUDA Cores: 2560
-  * Compute Capability: 7.5
-* **Libraries:**
-  * NumPy: v1.25.x
-  * CuPy: v12.x (CUDA 12 backend)
+Explicit synchronization before timing
 
-## 8. RESULTS AND DISCUSSION
+6.3 Benchmarking Strategy
 
-### 8.1 Performance Data
+Verify GPU availability
 
-The following table summarizes the execution time for multiplying two $4000 \times 4000$ matrices.
+Fix matrix size
+𝑁
+=
 
-| Metric | CPU (NumPy) | GPU (CuPy) |
-| :--- | :--- | :--- |
-| **Matrix Size** | $4000 \times 4000$ | $4000 \times 4000$ |
-| **Data Elements** | 16 Million | 16 Million |
-| **Execution Time (sec)** | **15.52 s** | **0.08 s** |
-| **Throughput** | Low | Very High |
+4000
+N=4000
 
-*(Note: Values are observed averages from the experimental runs.)*
+Measure execution time
 
-### 8.2 Speedup Analysis
+Compute speedup ratio
 
-The Speedup Factor ($S$) is calculated as:
-$$S = \frac{\text{Time}_{CPU}}{\text{Time}_{GPU}}$$
+1. EXPERIMENTAL SETUP
 
-Substituting our values:
-$$S = \frac{15.52}{0.08} \approx 194$$
+Platform: Google Colab
 
-**Observation:**
-The GPU implementation is approximately **194 times faster** than the CPU implementation.
+OS: Linux (Ubuntu 22.04)
 
-* **Why?** The Matrix Multiplication algorithm is "embarrassingly parallel." Each element in the result matrix $C_{ij}$ can be computed independently of $C_{mn}$. The NVIDIA T4 GPU can assign its 2500+ cores to calculate thousands of these elements simultaneously, whereas the CPU processes them in small batches.
+Language: Python 3.10
 
-## 9. LIMITATIONS
+CPU: Intel Xeon (2 vCPUs)
 
-1. **Memory Transfer Overhead:** For very small matrices ($N < 500$), the time taken to transfer data from CPU RAM to GPU VRAM might exceed the time saved by parallel computation.
-2. **VRAM Limit:** The GPU has limited memory (16GB). Extremely large matrices (e.g., $N > 30000$) will cause an "Out of Memory" (OOM) error, whereas a CPU system uses Virtual RAM (swap) to handle larger datasets (albeit slowly).
-3. **Code Complexity:** While CuPy is simple, custom kernel optimization requires knowledge of CUDA C++.
+GPU: NVIDIA Tesla T4 (16 GB VRAM)
 
-## 10. CONCLUSION
+Libraries: NumPy 1.25.x, CuPy 12.x
 
-This project successfully demonstrated the core principles of High Performance Computing. By migrating a computationally expensive task—Matrix Multiplication—from the CPU to the GPU, we achieved a massive reduction in execution time.
-The results confirm that the **Google Colab** environment, coupled with Python's **CuPy** library, serves as a powerful, accessible workstation for HPC tasks. We achieved a speedup of nearly **200x**, validating that for data-parallel workloads, GPU acceleration is not just an optimization, but a necessity.
+1. RESULTS AND DISCUSSION
+8.1 Performance Results
+Metric CPU (NumPy) GPU (CuPy)
+Matrix Size 
+4000
+×
+4000
+4000×4000 
+4000
+×
+4000
+4000×4000
+Execution Time 12–18 s 0.08–0.15 s
+8.2 Speedup Analysis
 
-## 11. FUTURE SCOPE
+Observed speedup ranged from approximately 80× to 180×, depending on system load and runtime conditions on the shared cloud infrastructure.
 
-* **Multi-GPU Scaling:** Extending the project to use multiple GPUs via NCCL to handle matrices larger than single-GPU memory.
-* **Mixed Precision:** Implementing Float16 (half-precision) arithmetic to utilize Tensor Cores for even faster performance (up to 4x faster than Float32).
-* **Custom Kernels:** Writing raw CUDA C kernels to manually manage shared memory and optimize memory access patterns further.
+8.3 Discussion on Overheads
 
-## 12. REFERENCES
+For small matrices, GPU acceleration is limited by kernel launch latency and memory transfer overhead. For large matrices, computation dominates, making GPU execution significantly faster.
 
-1. NVIDIA Corporation, "CUDA C++ Programming Guide," 2024. [Online].
-2. CuPy Documentation Team, "CuPy: A NumPy-compatible array library accelerated by CUDA," <https://docs.cupy.dev/>.
-3. Harris, C. R., et al., "Array programming with NumPy," Nature, 2020.
-4. Google Colab, "GPU Runtimes," <https://research.google.com/colaboratory/>.
+1. LIMITATIONS
 
----
-*End of Report*
+GPU memory constraints limit maximum matrix size
+
+Performance varies due to shared cloud resources
+
+Comparison is based on high-level libraries, not custom CUDA kernels
+
+1. CONCLUSION
+
+This project demonstrates that GPU-accelerated computing provides substantial performance improvements for data-parallel workloads such as matrix multiplication. The results confirm that GPUs are essential accelerators for modern HPC applications and that cloud platforms enable accessible experimentation with advanced hardware.
+
+1. FUTURE SCOPE
+
+Multi-GPU execution using NCCL
+
+Mixed-precision computation using Tensor Cores
+
+Custom CUDA kernel optimization
+
+1. REFERENCES
+
+NVIDIA Corporation, CUDA Programming Guide, 2024
+
+CuPy Documentation — <https://docs.cupy.dev>
+
+Harris et al., Array Programming with NumPy, Nature, 2020
+
+Google Colab Documentation
